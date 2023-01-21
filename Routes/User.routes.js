@@ -1,10 +1,13 @@
 const { Router } = require('express');
+const express = require('express');
+const app = express();
 const UserRouter = Router();
 const JWT = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 require('dotenv').config();
 
 const { UserModel } = require('../Models/User.model');
+const { Authenticate } = require('../MiddleWare/Authenticate');
 
 UserRouter.post('/register', async (req, res) => {
     const {name,email, password } = req.body;
@@ -27,13 +30,14 @@ UserRouter.post('/register', async (req, res) => {
 UserRouter.post('/login', async (req, res) => {
     const { email, password } = req.body;
     const UserLogin = await UserModel.find({ email });
+    console.log();
     try {
         if (UserLogin.length > 0) {
             const SecurePassword = UserLogin[0].password;
             bcrypt.compare(password, SecurePassword, function (err, result) {
                 if (result) {
                     const token = JWT.sign({ 'userID': UserLogin[0]._id }, process.env.JWT_KEY);
-                    res.send({ "message": "Account Created, LogIn Successfull" , "token" : token});
+                    res.send({ "message": "Account Created, LogIn Successfull" , "token" : token,email});
                 }
                 else {
                     res.status(400).send({ "message": "User With Email Not Found, Try Again" })
@@ -45,6 +49,15 @@ UserRouter.post('/login', async (req, res) => {
         }
     } catch (error) {
         res.status(400).send({ "message": "Something Went Wrong!!" });
+    }
+})
+
+UserRouter.get('/profile', async(req,res)=>{
+    try {
+        const UserProfile = await UserModel.find();
+        res.send(UserProfile);
+    } catch (error) {
+        res.send({"mesage" : "Something Went Wrong"})
     }
 })
 
