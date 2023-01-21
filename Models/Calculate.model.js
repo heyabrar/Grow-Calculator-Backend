@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 
 const CalculatorSchema = mongoose.Schema({
-    amount : Number,
-    interest: Number,
-    year : Number,
+    amount : String,
+    interest: String,
+    year : String,
 });
 
 const CalculatorModel = mongoose.model('Calc', CalculatorSchema);

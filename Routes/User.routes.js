@@ -27,7 +27,6 @@ UserRouter.post('/register', async (req, res) => {
 UserRouter.post('/login', async (req, res) => {
     const { email, password } = req.body;
     const UserLogin = await UserModel.find({ email });
-    console.log();
     try {
         if (UserLogin.length > 0) {
             const SecurePassword = UserLogin[0].password;
