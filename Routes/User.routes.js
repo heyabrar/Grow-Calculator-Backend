@@ -1,13 +1,10 @@
 const { Router } = require('express');
-const express = require('express');
-const app = express();
 const UserRouter = Router();
 const JWT = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 require('dotenv').config();
 
 const { UserModel } = require('../Models/User.model');
-const { Authenticate } = require('../MiddleWare/Authenticate');
 
 UserRouter.post('/register', async (req, res) => {
     const {name,email, password } = req.body;
